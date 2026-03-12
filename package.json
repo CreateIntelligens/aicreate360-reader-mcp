@@ -1,8 +1,8 @@
 {
-  "name": "create360-content-mcp-server",
+  "name": "aicreate360-content-mcp-server",
   "version": "0.1.0",
   "private": true,
-  "description": "MCP server for reading Create360-backed content sources such as SETN, CTITV, and Bestshop.",
+  "description": "MCP server for reading AICreate360-backed content sources such as SETN, CTITV, and Bestshop.",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {

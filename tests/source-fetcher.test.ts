@@ -12,7 +12,7 @@ describe("source fetcher", () => {
     vi.useRealTimers()
   })
 
-  it("strips the Create360 reader envelope", async () => {
+  it("strips the AICreate360 reader envelope", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       text: async () => "Title: test\n\nMarkdown Content:\nHello world"

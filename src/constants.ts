@@ -1,4 +1,4 @@
-export const SERVER_NAME = "create360-content-mcp-server"
+export const SERVER_NAME = "aicreate360-content-mcp-server"
 export const SERVER_VERSION = "0.1.0"
 export const DEFAULT_LIMIT = 10
 export const MAX_LIMIT = 50
