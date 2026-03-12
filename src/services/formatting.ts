@@ -1,25 +1,25 @@
-import type { ContentItem, PaginatedResult, ResponseFormat, SourceSummary } from "../types.js";
+import type { ContentItem, PaginatedResult, ResponseFormat, SourceSummary } from "../types.js"
 
 export function asText(
   format: ResponseFormat,
   title: string,
   payload: unknown,
-  markdown: string,
+  markdown: string
 ): string {
   if (format === "json") {
-    return JSON.stringify(payload, null, 2);
+    return JSON.stringify(payload, null, 2)
   }
 
-  return `# ${title}\n\n${markdown}`;
+  return `# ${title}\n\n${markdown}`
 }
 
 export function renderSourceSummaryMarkdown(summaries: SourceSummary[]): string {
   return summaries
     .map((summary) => {
-      const sections = summary.supports.map((value) => `- ${value}`).join("\n");
-      return `## ${summary.id}\n\n- Title: ${summary.title}\n- Type: ${summary.contentType}\n- Description: ${summary.description}\n- Capabilities:\n${sections}`;
+      const sections = summary.supports.map((value) => `- ${value}`).join("\n")
+      return `## ${summary.id}\n\n- Title: ${summary.title}\n- Type: ${summary.contentType}\n- Description: ${summary.description}\n- Capabilities:\n${sections}`
     })
-    .join("\n\n");
+    .join("\n\n")
 }
 
 export function renderPaginatedItemsMarkdown(result: PaginatedResult<ContentItem>): string {
@@ -29,8 +29,8 @@ export function renderPaginatedItemsMarkdown(result: PaginatedResult<ContentItem
     `- Total matched: ${result.total}`,
     `- Returned: ${result.count}`,
     `- Offset: ${result.offset}`,
-    `- Has more: ${result.hasMore ? "yes" : "no"}`,
-  ].join("\n");
+    `- Has more: ${result.hasMore ? "yes" : "no"}`
+  ].join("\n")
 
   const items = result.items
     .map((item, index) => {
@@ -40,16 +40,16 @@ export function renderPaginatedItemsMarkdown(result: PaginatedResult<ContentItem
         item.section ? `   - Section: ${item.section}` : null,
         item.subtitle ? `   - Subtitle: ${item.subtitle}` : null,
         item.timestampText ? `   - Time: ${item.timestampText}` : null,
-        typeof item.price === "number" ? `   - Price: ${item.price}` : null,
+        typeof item.price === "number" ? `   - Price: ${item.price}` : null
       ]
         .filter(Boolean)
-        .join("\n");
+        .join("\n")
 
-      return fields;
+      return fields
     })
-    .join("\n");
+    .join("\n")
 
-  return `${header}\n\n${items || "No items found."}`;
+  return `${header}\n\n${items || "No items found."}`
 }
 
 export function renderItemMarkdown(item: ContentItem): string {
@@ -59,8 +59,8 @@ export function renderItemMarkdown(item: ContentItem): string {
     item.section ? `- Section: ${item.section}` : null,
     item.subtitle ? `- Subtitle: ${item.subtitle}` : null,
     item.timestampText ? `- Time: ${item.timestampText}` : null,
-    typeof item.price === "number" ? `- Price: ${item.price}` : null,
-  ].filter(Boolean);
+    typeof item.price === "number" ? `- Price: ${item.price}` : null
+  ].filter(Boolean)
 
-  return lines.join("\n");
+  return lines.join("\n")
 }
