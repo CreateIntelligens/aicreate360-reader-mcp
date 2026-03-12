@@ -12,7 +12,7 @@ const sectionBoundaries = [
 
 function parseProducts(section: string, block: string): ContentItem[] {
   const pattern =
-    /\[\#\#\#\#\#\s+([^\]]+)\]\((https:\/\/bestshop\.setddg\.com\/[^)]+)\)\s+####\s+([0-9,]+)/g
+    /\[#####\s+([^\]]+)\]\((https:\/\/bestshop\.setddg\.com\/[^)]+)\)\s+####\s+([0-9,]+)/g
   const items: ContentItem[] = []
   let match: RegExpExecArray | null
 

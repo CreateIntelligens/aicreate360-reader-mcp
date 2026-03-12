@@ -40,7 +40,7 @@ server.registerTool(
       openWorldHint: true
     }
   },
-  async ({ response_format }) => {
+  ({ response_format }) => {
     const payload = { sources: Object.values(adapters).map((adapter) => adapter.summary) }
     return {
       content: [

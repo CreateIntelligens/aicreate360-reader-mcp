@@ -13,7 +13,9 @@ function stripReaderEnvelope(body: string): string {
 
 export async function fetchSourceMarkdown(source: SourceId): Promise<string> {
   const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS)
+  const timeout = setTimeout(() => {
+    controller.abort()
+  }, FETCH_TIMEOUT_MS)
 
   try {
     const response = await fetch(SOURCE_URLS[source], {
