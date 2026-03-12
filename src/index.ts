@@ -24,11 +24,11 @@ const server = new McpServer({
 })
 
 server.registerTool(
-  "create360_list_sources",
+  "aicreate360_list_sources",
   {
-    title: "List Create360 Sources",
+    title: "List AICreate360 Sources",
     description:
-      "List all supported Create360 content sources and the capabilities each adapter exposes.",
+      "List all supported AICreate360 content sources and the capabilities each adapter exposes.",
     inputSchema: z.object({
       response_format: z.enum(["markdown", "json"]).default("markdown")
     }),
@@ -48,7 +48,7 @@ server.registerTool(
           type: "text",
           text: asText(
             response_format,
-            "Create360 Sources",
+            "AICreate360 Sources",
             payload,
             renderSourceSummaryMarkdown(payload.sources)
           )
@@ -60,7 +60,7 @@ server.registerTool(
 )
 
 server.registerTool(
-  "create360_list_items",
+  "aicreate360_list_items",
   {
     title: "List Source Items",
     description:
@@ -105,7 +105,7 @@ server.registerTool(
 )
 
 server.registerTool(
-  "create360_get_item",
+  "aicreate360_get_item",
   {
     title: "Get Source Item",
     description:

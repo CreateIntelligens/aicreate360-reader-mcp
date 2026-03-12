@@ -22,7 +22,7 @@ export async function fetchSourceMarkdown(source: SourceId): Promise<string> {
       method: "GET",
       headers: {
         Accept: "text/plain, text/markdown, text/*;q=0.9, */*;q=0.1",
-        "User-Agent": "create360-content-mcp-server/0.1.0"
+        "User-Agent": "aicreate360-content-mcp-server/0.1.0"
       },
       signal: controller.signal
     })
