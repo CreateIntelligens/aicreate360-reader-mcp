@@ -1,10 +1,13 @@
 import { z } from "zod"
 
 import { DEFAULT_LIMIT, MAX_LIMIT } from "./constants.js"
+import { normalizeSourceId } from "./source-aliases.js"
 
 export const responseFormatSchema = z.enum(["markdown", "json"]).default("markdown")
 
-export const sourceIdSchema = z.enum(["setn", "ctitv", "bestshop"])
+export const canonicalSourceIdSchema = z.enum(["setn", "ctitv", "bestshop"])
+
+export const sourceIdSchema = z.preprocess(normalizeSourceId, canonicalSourceIdSchema)
 
 export const listItemsInputSchema = z.object({
   source: sourceIdSchema.describe("Which source to query."),
@@ -34,7 +37,7 @@ export const getItemInputSchema = z.object({
 export const sourceSummaryOutputSchema = z.object({
   sources: z.array(
     z.object({
-      id: sourceIdSchema,
+      id: canonicalSourceIdSchema,
       title: z.string(),
       description: z.string(),
       contentType: z.enum(["news", "media", "catalog"]),
@@ -44,7 +47,7 @@ export const sourceSummaryOutputSchema = z.object({
 })
 
 export const listItemsOutputSchema = z.object({
-  source: sourceIdSchema,
+  source: canonicalSourceIdSchema,
   section: z.string().optional(),
   total: z.number(),
   count: z.number(),
