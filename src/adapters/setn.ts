@@ -12,12 +12,18 @@ function extractLinks(block: string, section: string): ContentItem[] {
   const pattern = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g
   const items: ContentItem[] = []
   let match: RegExpExecArray | null
+  const normalizedSection = section.trim()
 
   while ((match = pattern.exec(block)) !== null) {
     const title = match[1].trim().replace(/\*\*/g, "")
     const url = match[2].trim()
 
-    if (!title || title.startsWith("Image ") || title === "更多") {
+    if (
+      !title ||
+      title.startsWith("Image ") ||
+      title === "更多" ||
+      title.trim() === normalizedSection
+    ) {
       continue
     }
 

@@ -14,11 +14,17 @@ This server lets Codex read the latest content from:
 
 If you want Codex to answer questions like:
 
-- "列出 SETN 最新快訊"
-- "找出 CTITV 最近的公告"
-- "整理 Bestshop 美食類商品與價格"
+- "列出三立新聞網最新快訊"
+- "找出中天電視最近的公告"
+- "整理三立嚴選美食類商品與價格"
 
 this MCP is built for that workflow.
+
+Source aliases are normalized automatically. For example:
+
+- `setn`, `SETN`, `三立新聞網`, `三立新聞` -> `setn`
+- `ctitv`, `CTITV`, `中天電視`, `中天新聞網`, `中天` -> `ctitv`
+- `bestshop`, `Bestshop`, `三立嚴選`, `嚴選` -> `bestshop`
 
 ## Install
 
@@ -81,11 +87,8 @@ If you manage MCP servers manually, use the same `~/.codex/config.toml` block sh
 
 Once enabled, try prompts like:
 
-- `列出 setn 最新 10 則快訊`
-- `幫我整理 ctitv 最近的 announcements`
-- `列出 bestshop 美食分類前 5 個商品和價格`
-- `比較 setn 與 ctitv 目前可讀取的內容類型`
-- `找出 bestshop 某個商品 URL 對應的名稱與價格`
+- `列出三立新聞網熱門最新 10 則新聞`
+- `列出三立嚴選美食分類最熱銷的 5 個產品跟價格`
 
 ## What This MCP Exposes
 

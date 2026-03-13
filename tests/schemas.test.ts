@@ -15,6 +15,15 @@ describe("schemas", () => {
     expect(parsed.offset).toBe(0)
   })
 
+  it("normalizes source aliases in list input", () => {
+    const parsed = listItemsInputSchema.parse({
+      source: "三立新聞網",
+      response_format: "markdown"
+    })
+
+    expect(parsed.source).toBe("setn")
+  })
+
   it("rejects invalid list input", () => {
     expect(() =>
       listItemsInputSchema.parse({ source: "unknown", response_format: "markdown" })
@@ -23,12 +32,22 @@ describe("schemas", () => {
 
   it("validates get item input", () => {
     const parsed = getItemInputSchema.parse({
-      source: "bestshop",
+      source: "三立嚴選",
       url: "https://bestshop.setddg.com/PM123",
       response_format: "json"
     })
 
     expect(parsed.source).toBe("bestshop")
+  })
+
+  it("normalizes CTITV aliases with mixed casing and domains", () => {
+    expect(
+      getItemInputSchema.parse({
+        source: "WWW.CTITV.COM.TW",
+        url: "https://www.ctitv.com.tw/announce/2022/07/11063",
+        response_format: "markdown"
+      }).source
+    ).toBe("ctitv")
   })
 
   it("validates source summary output", () => {

@@ -83,6 +83,22 @@ describe("source adapters", () => {
     expect(result.items.every((item) => item.section === "熱門新聞")).toBe(true)
   })
 
+  it("skips SETN section landing pages and keeps only actual stories", async () => {
+    fetchSourceMarkdown.mockResolvedValueOnce(`
+[熱門新聞](https://www.setn.com/ViewAll.aspx?PageGroupID=0)
+* [**熱門標題一**](https://setn.com/hot1)
+* [**熱門標題二**](https://setn.com/hot2)
+[最新影音]
+`)
+
+    const { setnAdapter } = await import("../src/adapters/setn.js")
+    const result = await setnAdapter.listItems({ section: "熱門新聞", limit: 10, offset: 0 })
+
+    expect(result.total).toBe(2)
+    expect(result.items.map((item) => item.title)).toEqual(["熱門標題一", "熱門標題二"])
+    expect(result.items.some((item) => item.url.includes("ViewAll.aspx"))).toBe(false)
+  })
+
   it("deduplicates SETN items and tolerates missing sections", async () => {
     fetchSourceMarkdown.mockResolvedValueOnce(`
 快訊
