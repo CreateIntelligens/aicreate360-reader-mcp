@@ -14,9 +14,9 @@ This server lets Codex read the latest content from:
 
 If you want Codex to answer questions like:
 
-- "列出三立新聞網最新快訊"
-- "找出中天電視最近的公告"
-- "整理三立嚴選美食類商品與價格"
+- `列出三立新聞網熱門最新 10 則新聞`
+- `找出中天電視有哪些主播`
+- `列出三立嚴選美食分類最熱銷的 5 個產品跟價格`
 
 this MCP is built for that workflow.
 
@@ -82,13 +82,6 @@ Based on OpenAI's Codex documentation, Codex Desktop uses the shared Codex MCP c
 3. Open a new Codex session and use the server
 
 If you manage MCP servers manually, use the same `~/.codex/config.toml` block shown above, then restart Codex Desktop.
-
-## Example Prompts
-
-Once enabled, try prompts like:
-
-- `列出三立新聞網熱門最新 10 則新聞`
-- `列出三立嚴選美食分類最熱銷的 5 個產品跟價格`
 
 ## What This MCP Exposes
 
