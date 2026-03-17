@@ -1,6 +1,6 @@
 # AICreate360 Reader MCP Server
 
-[![CI](https://github.com/john-data-chen/next-board/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/CreateIntelligens/aicreate360-mcp/actions/workflows/CI.yml)
+[![CI](https://github.com/john-data-chen/next-board/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/CreateIntelligens/aicreate360-reader-mcp/actions/workflows/CI.yml)
 
 ## Overview
 
@@ -14,19 +14,19 @@
 - GitHub 頁面、Wiki
 - 任何公開可存取的網頁
 
-使用範例：
+### 使用範例 (Gemini CLI)
 
-- `幫我看這個網址的內容 https://example.com`
-- `抓這個頁面的重點 https://docs.example.com/guide`
-- `把這個網頁轉成 markdown`
+- `幫我尋找 setn.com 的十則熱門新聞`
+- `幫我把這個技術文件轉成 Markdown：https://docs.github.com/en/rest`
+- `分析這個部落格文章的觀點：https://blog.example.com/post/1`
 
 > 部分網站受反爬蟲保護或需要驗證，這些網站將無法擷取內容，工具會回傳對應的錯誤訊息。
 
 ## Install
 
 ```bash
-git clone https://github.com/CreateIntelligens/aicreate360-mcp.git
-cd aicreate360-mcp
+git clone https://github.com/CreateIntelligens/aicreate360-reader-mcp.git
+cd aicreate360-reader-mcp
 pnpm install
 pnpm build
 ```
@@ -37,41 +37,54 @@ Build 完成後，MCP 進入點為：
 node dist/index.js
 ```
 
-## Enable In OpenAI Codex CLI
+## Enable In Gemini CLI
 
-建議使用以下指令新增：
+### 1. 使用 CLI 自動新增 (建議方式)
 
-```bash
-codex mcp add aicreate360-reader -- node "[your-project-path]/dist/index.js"
-```
+您可以根據需求選擇安裝範圍（預設建議使用 **User (全域)** 較為方便）：
 
-驗證是否成功：
+**User-level (全域):**
 
 ```bash
-codex mcp list
+gemini mcp add aicreate360-reader-mcp node "[your-project-path]/dist/index.js"
 ```
 
-若需手動設定，在 `~/.codex/config.toml` 加入：
-
-```toml
-[mcp_servers.aicreate360-reader]
-command = "node"
-args = ["/absolute/path/to/aicreate360-mcp/dist/index.js"]
-```
-
-取得你機器上的絕對路徑：
+**Project-level (僅限當前專案):**
 
 ```bash
-pwd
+gemini mcp add --scope project aicreate360-reader-mcp node "[your-project-path]/dist/index.js"
 ```
 
-## Enable In OpenAI Codex Desktop
+> **小技巧**：在專案目錄下執行 `pwd` 即可取得絕對路徑（`your-project-path`）。
 
-Codex Desktop 使用與 Codex CLI 相同的 MCP 設定。步驟：
+### 2. 手動設定 `settings.json`
 
-1. 使用 `codex mcp add ...` 新增 server
-2. 重新啟動 Codex Desktop
-3. 開始使用
+若需手動設定，請在 `~/.gemini/settings.json` (User) 或 `.gemini/settings.json` (Project) 加入：
+
+```json
+{
+  "mcpServers": {
+    "aicreate360-reader-mcp": {
+      "command": "node",
+      "args": ["/absolute/path/to/aicreate360-reader-mcp/dist/index.js"]
+    }
+  }
+}
+```
+
+### 3. 驗證是否成功
+
+在 Shell 執行：
+
+```bash
+gemini mcp list
+```
+
+或在 Gemini CLI 互動對話中使用：
+
+```bash
+/mcp list
+```
 
 ## What This MCP Exposes
 
