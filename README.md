@@ -1,34 +1,28 @@
-# AICreate360 Content MCP Server
+# AICreate360 Reader MCP Server
 
 [![CI](https://github.com/john-data-chen/next-board/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/CreateIntelligens/aicreate360-mcp/actions/workflows/CI.yml)
 
 ## Overview
 
-One MCP server, three live Taiwanese content sources, zero manual copy-paste.
+一個 MCP server，讓 AI 代理可以擷取任何公開網頁內容並轉換為乾淨的 Markdown。
 
-This server lets Codex read the latest content from:
+透過 [create360.ai](https://create360.ai) 服務，將任意 URL 的網頁內容轉為可讀的 Markdown 純文字，無需手動複製貼上。
 
-- [三立新聞網](https://setn.com): breaking news and headline feeds
-- [中天電視](https://www.ctitv.com.tw): programs, anchors, announcements, ethics, and complaint records
-- [三立嚴選](https://bestshop.setddg.com): categories, products, and prices
+適用於：
 
-If you want Codex to answer questions like:
+- 新聞網站、部落格、技術文件
+- GitHub 頁面、Wiki
+- 任何公開可存取的網頁
 
-- `列出三立新聞網熱門最新 10 則新聞`
-- `找出中天電視有哪些主播`
-- `列出三立嚴選美食分類最熱銷的 5 個產品跟價格`
+使用範例：
 
-this MCP is built for that workflow.
+- `幫我看這個網址的內容 https://example.com`
+- `抓這個頁面的重點 https://docs.example.com/guide`
+- `把這個網頁轉成 markdown`
 
-Source aliases are normalized automatically. For example:
-
-- `setn`, `SETN`, `三立新聞網`, `三立新聞` -> `setn`
-- `ctitv`, `CTITV`, `中天電視`, `中天新聞網`, `中天` -> `ctitv`
-- `bestshop`, `Bestshop`, `三立嚴選`, `嚴選` -> `bestshop`
+> 部分網站受反爬蟲保護或需要驗證，這些網站將無法擷取內容，工具會回傳對應的錯誤訊息。
 
 ## Install
-
-This project is currently installed from source.
 
 ```bash
 git clone https://github.com/CreateIntelligens/aicreate360-mcp.git
@@ -37,7 +31,7 @@ pnpm install
 pnpm build
 ```
 
-After build, the MCP entrypoint is:
+Build 完成後，MCP 進入點為：
 
 ```bash
 node dist/index.js
@@ -45,29 +39,27 @@ node dist/index.js
 
 ## Enable In OpenAI Codex CLI
 
-Recommended:
-
-You have to check and add project path in your machine
+建議使用以下指令新增：
 
 ```bash
-codex mcp add aicreate360-content -- node "[your-project-path]/dist/index.js"
+codex mcp add aicreate360-reader -- node "[your-project-path]/dist/index.js"
 ```
 
-Then verify:
+驗證是否成功：
 
 ```bash
 codex mcp list
 ```
 
-If you prefer manual configuration, add this to `~/.codex/config.toml`:
+若需手動設定，在 `~/.codex/config.toml` 加入：
 
 ```toml
-[mcp_servers.aicreate360-content]
+[mcp_servers.aicreate360-reader]
 command = "node"
-args = ["/absolute/path/from-your-machine/to/aicreate360-mcp/dist/index.js"]
+args = ["/absolute/path/to/aicreate360-mcp/dist/index.js"]
 ```
 
-Generate the path from the project root instead of copying someone else's local path:
+取得你機器上的絕對路徑：
 
 ```bash
 pwd
@@ -75,30 +67,29 @@ pwd
 
 ## Enable In OpenAI Codex Desktop
 
-Based on OpenAI's Codex documentation, Codex Desktop uses the shared Codex MCP configuration used by Codex CLI. In practice, the simplest path is:
+Codex Desktop 使用與 Codex CLI 相同的 MCP 設定。步驟：
 
-1. Add the server once with `codex mcp add ...`
-2. Restart Codex Desktop
-3. Open a new Codex session and use the server
-
-If you manage MCP servers manually, use the same `~/.codex/config.toml` block shown above, then restart Codex Desktop.
+1. 使用 `codex mcp add ...` 新增 server
+2. 重新啟動 Codex Desktop
+3. 開始使用
 
 ## What This MCP Exposes
 
-Current tools:
+提供一個工具：
 
-- `aicreate360_list_sources`
-  Lists supported sources and their capabilities.
-- `aicreate360_list_items`
-  Fetches the latest upstream content and returns normalized, paginated items.
-- `aicreate360_get_item`
-  Re-fetches the latest upstream content and resolves a specific item by URL.
+- **`aicreate360_fetch_url`**
+  輸入任意公開 URL，回傳該網頁的 Markdown 內容。
+
+  | 參數  | 類型           | 說明             |
+  | ----- | -------------- | ---------------- |
+  | `url` | `string` (URL) | 要擷取的公開網址 |
+
+  回傳格式：乾淨的 Markdown 純文字。
 
 ## Notes
 
-- This server fetches live data on every request.
-- It depends on these AICreate360 reader endpoints remaining available:
-  - `https:/setn.com`
-  - `https://www.ctitv.com.tw`
-  - `https://bestshop.setddg.com`
-- Runtime requires Node latest LTS and pnpm@latest.
+- 每次請求即時擷取，無快取。
+- 依賴 `https://create360.ai` 服務的可用性。
+- 無需任何認證即可使用。
+- 受反爬蟲保護的網站會回傳錯誤訊息。
+- Runtime 需要 Node.js >= 24 和 pnpm@latest。

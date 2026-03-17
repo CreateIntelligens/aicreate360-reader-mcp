@@ -1,91 +1,35 @@
 import { describe, expect, it } from "vitest"
 
-import {
-  getItemInputSchema,
-  getItemOutputSchema,
-  listItemsInputSchema,
-  listItemsOutputSchema,
-  sourceSummaryOutputSchema
-} from "../src/schemas.js"
+import { fetchUrlInputSchema, fetchUrlOutputSchema } from "../src/schemas.js"
 
 describe("schemas", () => {
-  it("applies defaults to list input schema", () => {
-    const parsed = listItemsInputSchema.parse({ source: "setn", response_format: "markdown" })
-    expect(parsed.limit).toBe(10)
-    expect(parsed.offset).toBe(0)
+  it("accepts a valid URL input", () => {
+    const parsed = fetchUrlInputSchema.parse({ url: "https://example.com" })
+    expect(parsed.url).toBe("https://example.com")
   })
 
-  it("normalizes source aliases in list input", () => {
-    const parsed = listItemsInputSchema.parse({
-      source: "三立新聞網",
-      response_format: "markdown"
-    })
-
-    expect(parsed.source).toBe("setn")
+  it("rejects non-URL strings", () => {
+    expect(() => fetchUrlInputSchema.parse({ url: "not-a-url" })).toThrow()
   })
 
-  it("rejects invalid list input", () => {
+  it("rejects missing url field", () => {
+    expect(() => fetchUrlInputSchema.parse({})).toThrow()
+  })
+
+  it("validates fetch output schema", () => {
     expect(() =>
-      listItemsInputSchema.parse({ source: "unknown", response_format: "markdown" })
-    ).toThrow()
-  })
-
-  it("validates get item input", () => {
-    const parsed = getItemInputSchema.parse({
-      source: "三立嚴選",
-      url: "https://bestshop.setddg.com/PM123",
-      response_format: "json"
-    })
-
-    expect(parsed.source).toBe("bestshop")
-  })
-
-  it("normalizes CTITV aliases with mixed casing and domains", () => {
-    expect(
-      getItemInputSchema.parse({
-        source: "WWW.CTITV.COM.TW",
-        url: "https://www.ctitv.com.tw/announce/2022/07/11063",
-        response_format: "markdown"
-      }).source
-    ).toBe("ctitv")
-  })
-
-  it("validates source summary output", () => {
-    const parsed = sourceSummaryOutputSchema.parse({
-      sources: [
-        {
-          id: "ctitv",
-          title: "CTITV",
-          description: "desc",
-          contentType: "media",
-          supports: ["list sections"]
-        }
-      ]
-    })
-
-    expect(parsed.sources).toHaveLength(1)
-  })
-
-  it("validates list item output", () => {
-    expect(() =>
-      listItemsOutputSchema.parse({
-        source: "setn",
-        total: 1,
-        count: 1,
-        offset: 0,
-        hasMore: false,
-        nextOffset: null,
-        items: [
-          {
-            title: "Headline",
-            url: "https://example.com/headline"
-          }
-        ]
+      fetchUrlOutputSchema.parse({
+        url: "https://example.com",
+        markdown: "# Hello"
       })
     ).not.toThrow()
   })
 
-  it("accepts null get item output", () => {
-    expect(() => getItemOutputSchema.parse({ item: null })).not.toThrow()
+  it("rejects output with missing markdown", () => {
+    expect(() =>
+      fetchUrlOutputSchema.parse({
+        url: "https://example.com"
+      })
+    ).toThrow()
   })
 })
