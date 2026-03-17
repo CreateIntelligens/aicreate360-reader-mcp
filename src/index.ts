@@ -1,22 +1,9 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js"
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
-import { z } from "zod"
 
-import { adapters, getAdapter } from "./adapters/index.js"
 import { SERVER_NAME, SERVER_VERSION } from "./constants.js"
-import {
-  getItemInputSchema,
-  getItemOutputSchema,
-  listItemsInputSchema,
-  listItemsOutputSchema,
-  sourceSummaryOutputSchema
-} from "./schemas.js"
-import {
-  asText,
-  renderItemMarkdown,
-  renderPaginatedItemsMarkdown,
-  renderSourceSummaryMarkdown
-} from "./services/formatting.js"
+import { fetchUrlInputSchema, fetchUrlOutputSchema } from "./schemas.js"
+import { fetchUrlMarkdown } from "./services/source-fetcher.js"
 
 const server = new McpServer({
   name: SERVER_NAME,
@@ -24,15 +11,13 @@ const server = new McpServer({
 })
 
 server.registerTool(
-  "aicreate360_list_sources",
+  "aicreate360_fetch_url",
   {
-    title: "List AICreate360 Sources",
+    title: "Fetch URL as Markdown",
     description:
-      "List all supported AICreate360 content sources and the capabilities each adapter exposes.",
-    inputSchema: z.object({
-      response_format: z.enum(["markdown", "json"]).default("markdown")
-    }),
-    outputSchema: sourceSummaryOutputSchema,
+      "Fetch any public URL and return its content as clean markdown via create360.ai. Works with news sites, documentation, GitHub, wikis, and more.",
+    inputSchema: fetchUrlInputSchema,
+    outputSchema: fetchUrlOutputSchema,
     annotations: {
       readOnlyHint: true,
       destructiveHint: false,
@@ -40,104 +25,21 @@ server.registerTool(
       openWorldHint: true
     }
   },
-  ({ response_format }) => {
-    const payload = { sources: Object.values(adapters).map((adapter) => adapter.summary) }
-    return {
-      content: [
-        {
-          type: "text",
-          text: asText(
-            response_format,
-            "AICreate360 Sources",
-            payload,
-            renderSourceSummaryMarkdown(payload.sources)
-          )
-        }
-      ],
-      structuredContent: payload as unknown as Record<string, unknown>
-    }
-  }
-)
+  async ({ url }) => {
+    try {
+      const markdown = await fetchUrlMarkdown(url)
+      const payload = { url, markdown }
 
-server.registerTool(
-  "aicreate360_list_items",
-  {
-    title: "List Source Items",
-    description:
-      "List available items for a source. Supports source-specific sections and returns paginated, structured results.",
-    inputSchema: listItemsInputSchema,
-    outputSchema: listItemsOutputSchema,
-    annotations: {
-      readOnlyHint: true,
-      destructiveHint: false,
-      idempotentHint: true,
-      openWorldHint: true
-    }
-  },
-  async ({ source, section, limit, offset, response_format }) => {
-    const adapter = getAdapter(source)
-    if (
-      section &&
-      !adapter.listSections().some((value) => value.toLowerCase() === section.toLowerCase())
-    ) {
-      throw new Error(
-        `Unknown section '${section}' for source '${source}'. Valid sections: ${adapter.listSections().join(", ")}`
-      )
-    }
-
-    const payload = await adapter.listItems({ section, limit, offset })
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: asText(
-            response_format,
-            `${source} Items`,
-            payload,
-            renderPaginatedItemsMarkdown(payload)
-          )
-        }
-      ],
-      structuredContent: payload as unknown as Record<string, unknown>
-    }
-  }
-)
-
-server.registerTool(
-  "aicreate360_get_item",
-  {
-    title: "Get Source Item",
-    description:
-      "Look up a previously listed item by its original source URL and return the normalized record.",
-    inputSchema: getItemInputSchema,
-    outputSchema: getItemOutputSchema,
-    annotations: {
-      readOnlyHint: true,
-      destructiveHint: false,
-      idempotentHint: true,
-      openWorldHint: true
-    }
-  },
-  async ({ source, url, response_format }) => {
-    const adapter = getAdapter(source)
-    const item = await adapter.getItemByUrl(url)
-    const payload = { item }
-
-    return {
-      content: [
-        {
-          type: "text",
-          text: asText(
-            response_format,
-            `${source} Item`,
-            payload,
-            item ? renderItemMarkdown(item) : "No matching item found."
-          )
-        }
-      ],
-      structuredContent: payload as unknown as Record<string, unknown>,
-      isError: item === null
+      return {
+        content: [{ type: "text", text: markdown }],
+        structuredContent: payload as unknown as Record<string, unknown>
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      return {
+        content: [{ type: "text", text: message }],
+        isError: true
+      }
     }
   }
 )

@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { FETCH_TIMEOUT_MS } from "../src/constants.js"
-import { fetchSourceMarkdown } from "../src/services/source-fetcher.js"
+import { fetchUrlMarkdown } from "../src/services/source-fetcher.js"
 
 describe("source fetcher", () => {
   beforeEach(() => {
@@ -12,13 +12,13 @@ describe("source fetcher", () => {
     vi.useRealTimers()
   })
 
-  it("strips the AICreate360 reader envelope", async () => {
+  it("strips the create360 reader envelope", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
       text: async () => "Title: test\n\nMarkdown Content:\nHello world"
     } as Response)
 
-    await expect(fetchSourceMarkdown("setn")).resolves.toBe("Hello world")
+    await expect(fetchUrlMarkdown("https://example.com")).resolves.toBe("Hello world")
   })
 
   it("returns trimmed body when there is no envelope", async () => {
@@ -27,7 +27,20 @@ describe("source fetcher", () => {
       text: async () => "  raw body  "
     } as Response)
 
-    await expect(fetchSourceMarkdown("ctitv")).resolves.toBe("raw body")
+    await expect(fetchUrlMarkdown("https://example.com")).resolves.toBe("raw body")
+  })
+
+  it("builds the correct create360 URL", async () => {
+    const spy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      text: async () => "content"
+    } as Response)
+
+    await fetchUrlMarkdown("https://example.com/page")
+    expect(spy).toHaveBeenCalledWith(
+      "https://create360.ai/https://example.com/page",
+      expect.objectContaining({ method: "GET" })
+    )
   })
 
   it("throws on non-ok responses", async () => {
@@ -36,8 +49,8 @@ describe("source fetcher", () => {
       status: 503
     } as Response)
 
-    await expect(fetchSourceMarkdown("bestshop")).rejects.toThrow(
-      "Fetch failed for 'bestshop' with HTTP 503"
+    await expect(fetchUrlMarkdown("https://example.com")).rejects.toThrow(
+      "Fetch failed for 'https://example.com' with HTTP 503"
     )
   })
 
@@ -47,8 +60,8 @@ describe("source fetcher", () => {
       text: async () => "Markdown Content:\n   "
     } as Response)
 
-    await expect(fetchSourceMarkdown("setn")).rejects.toThrow(
-      "Fetch for 'setn' returned an empty body"
+    await expect(fetchUrlMarkdown("https://example.com")).rejects.toThrow(
+      "Fetch for 'https://example.com' returned an empty body"
     )
   })
 
@@ -66,11 +79,40 @@ describe("source fetcher", () => {
         }) as Promise<Response>
     )
 
-    const request = fetchSourceMarkdown("setn")
+    const request = fetchUrlMarkdown("https://example.com")
     const assertion = expect(request).rejects.toThrow(
-      `Fetch timed out for 'setn' after ${FETCH_TIMEOUT_MS}ms`
+      `Fetch timed out for 'https://example.com' after ${FETCH_TIMEOUT_MS}ms`
     )
     await vi.advanceTimersByTimeAsync(FETCH_TIMEOUT_MS + 5)
     await assertion
+  })
+
+  it("detects anti-crawler protection in response content", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      text: async () => "Markdown Content:\nPlease verify you are a human to continue"
+    } as Response)
+
+    await expect(fetchUrlMarkdown("https://protected-site.com")).rejects.toThrow(
+      "該網站 (https://protected-site.com) 無法擷取內容"
+    )
+  })
+
+  it("detects cloudflare protection", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      text: async () => "Markdown Content:\nChecking your browser before accessing the site"
+    } as Response)
+
+    await expect(fetchUrlMarkdown("https://cloudflare-site.com")).rejects.toThrow("無法擷取內容")
+  })
+
+  it("detects Chinese verification messages", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      text: async () => "Markdown Content:\n請完成驗證後繼續瀏覽"
+    } as Response)
+
+    await expect(fetchUrlMarkdown("https://tw-site.com")).rejects.toThrow("無法擷取內容")
   })
 })
