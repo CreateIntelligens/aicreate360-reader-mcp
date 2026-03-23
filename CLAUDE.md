@@ -50,8 +50,8 @@ pnpm format           # oxfmt
 
 ## npm Package
 
-- Package name: `aicreate360` on npmjs.com
-- `npx aicreate360` runs the MCP server directly
+- Package name: `aicreate360-reader-mcp` on npmjs.com
+- `npx aicreate360-reader-mcp` runs the MCP server directly
 
 ## Git Workflow
 
