@@ -1,5 +1,5 @@
 {
-  "name": "aicreate360",
+  "name": "aicreate360-reader-mcp",
   "version": "1.0.0",
   "description": "MCP server that fetches any public URL as clean markdown via create360.ai.",
   "keywords": [
@@ -22,7 +22,7 @@
     "url": "https://github.com/CreateIntelligens/aicreate360-reader-mcp.git"
   },
   "bin": {
-    "aicreate360": "dist/index.js"
+    "aicreate360-reader-mcp": "dist/index.js"
   },
   "files": [
     "dist",
