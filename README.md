@@ -1,11 +1,10 @@
 # aicreate360-reader-mcp
 
-[![CI](https://github.com/CreateIntelligens/aicreate360-reader-mcp/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/CreateIntelligens/aicreate360-reader-mcp/actions/workflows/CI.yml)
 [![npm version](https://img.shields.io/npm/v/aicreate360-reader-mcp)](https://www.npmjs.com/package/aicreate360-reader-mcp)
 
 An MCP server that lets AI agents fetch any public webpage and convert it to clean Markdown.
 
-Powered by [create360.ai](https://create360.ai), it turns any URL into readable Markdown text — no manual copy-paste needed.
+Powered by [aicreate360](https://www.aicreate360.com/en-US), it turns any URL into readable Markdown text — no manual copy-paste needed.
 
 Works with:
 
