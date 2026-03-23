@@ -46,6 +46,12 @@ pnpm format           # oxfmt
 - Commits: Conventional Commits enforced by commitlint + husky
 - Pre-commit hook: `pnpm lint-staged` + `pnpm check`
 - CI: GitHub Actions on push to main/dev and PR to main
+- Publish: GitHub Actions on tag push (`v*`) or manual trigger → npm publish
+
+## npm Package
+
+- Package name: `aicreate360` on npmjs.com
+- `npx aicreate360` runs the MCP server directly
 
 ## Git Workflow
 
