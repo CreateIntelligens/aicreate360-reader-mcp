@@ -1,12 +1,12 @@
 # AICreate360 Reader MCP Server
 
-[![CI](https://github.com/john-data-chen/next-board/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/CreateIntelligens/aicreate360-reader-mcp/actions/workflows/CI.yml)
+[![npm version](https://img.shields.io/npm/v/aicreate360-reader-mcp)](https://www.npmjs.com/package/aicreate360-reader-mcp)
 
 ## Overview
 
 一個 MCP server，讓 AI 代理可以擷取任何公開網頁內容並轉換為乾淨的 Markdown。
 
-透過 [create360.ai](https://create360.ai) 服務，將任意 URL 的網頁內容轉為可讀的 Markdown 純文字，無需手動複製貼上。
+透過 [創造智能](https://www.aicreate360.com/) 服務，將任意 URL 的網頁內容轉為可讀的 Markdown 純文字，無需手動複製貼上。
 
 適用於：
 
