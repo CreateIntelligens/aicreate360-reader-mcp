@@ -1,9 +1,9 @@
 # ai files
+ai-docs
 .agent
 .agents
 .claude
 .kilocode
-ai-docs
 
 dist
 node_modules

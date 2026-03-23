@@ -1,8 +1,35 @@
 {
-  "name": "aicreate360-reader-mcp-server",
-  "version": "0.2.0",
-  "private": true,
+  "name": "aicreate360",
+  "version": "1.0.0",
   "description": "MCP server that fetches any public URL as clean markdown via create360.ai.",
+  "keywords": [
+    "ai",
+    "create360",
+    "markdown",
+    "mcp",
+    "model-context-protocol",
+    "url-fetcher",
+    "web-scraper"
+  ],
+  "homepage": "https://github.com/CreateIntelligens/aicreate360-reader-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/CreateIntelligens/aicreate360-reader-mcp/issues"
+  },
+  "license": "MIT",
+  "author": "john-chen-aicreate360",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CreateIntelligens/aicreate360-reader-mcp.git"
+  },
+  "bin": {
+    "aicreate360": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "README.zh-TW.md",
+    "LICENSE"
+  ],
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
