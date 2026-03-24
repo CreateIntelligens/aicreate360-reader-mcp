@@ -18,7 +18,7 @@ Works with:
 
 ## Quick Start (npx)
 
-No installation required — run directly with `npx`:
+No installation required — run directly with `npx -y aicreate360-reader-mcp`:
 
 ```json
 {
@@ -39,23 +39,21 @@ Add this to your MCP client config:
 | Claude Desktop | `claude_desktop_config.json`    |
 | Gemini CLI     | `~/.gemini/settings.json`       |
 
-## Install from Source
+## Install via npm
 
 ```bash
-git clone https://github.com/CreateIntelligens/aicreate360-reader-mcp.git
-cd aicreate360-reader-mcp
-pnpm install
-pnpm build
+npm i aicreate360-reader-mcp // in project
+npm i -g aicreate360-reader-mcp // global
 ```
 
-Then point your MCP client to the built entry point:
+Then point your MCP client to the installed entry point:
 
 ```json
 {
   "mcpServers": {
     "aicreate360": {
-      "command": "node",
-      "args": ["/absolute/path/to/aicreate360-reader-mcp/dist/index.js"]
+      "command": "npx",
+      "args": ["-y", "aicreate360-reader-mcp"]
     }
   }
 }
@@ -65,7 +63,7 @@ Then point your MCP client to the built entry point:
 
 This server exposes a single tool:
 
-### `aicreate360_fetch_url`
+### `fetch_url`
 
 Fetch any public URL and return its content as clean Markdown.
 
