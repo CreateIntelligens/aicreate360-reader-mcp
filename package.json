@@ -56,17 +56,17 @@
     "@commitlint/config-conventional": "^20.5.0",
     "@commitlint/cz-commitlint": "^20.5.0",
     "@types/node": "^24.12.0",
-    "@vitest/coverage-v8": "^4.1.0",
+    "@vitest/coverage-v8": "^4.1.1",
     "commitizen": "^4.3.1",
     "husky": "^9.1.7",
-    "inquirer": "^9.3.8",
+    "inquirer": "^13.3.2",
     "lint-staged": "^16.4.0",
     "oxfmt": "^0.41.0",
     "oxlint": "^1.56.0",
-    "oxlint-tsgolint": "^0.17.0",
+    "oxlint-tsgolint": "^0.17.2",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.0"
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.1"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts,cts,mts,json,md}": [

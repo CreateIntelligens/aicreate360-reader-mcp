@@ -12,7 +12,7 @@ const server = new McpServer({
 })
 
 server.registerTool(
-  "aicreate360_fetch_url",
+  "fetch_url",
   {
     title: "Fetch URL as Markdown",
     description:
