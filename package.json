@@ -1,6 +1,6 @@
 {
   "name": "aicreate360-reader-mcp",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "MCP server that fetches any public URL as clean markdown via create360.ai.",
   "keywords": [
     "ai",
