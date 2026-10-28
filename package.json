@@ -66,7 +66,7 @@
     "oxlint-tsgolint": "^0.17.4",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
-    "vitest": "^4.1.2"
+    "vitest": "^5.0.5"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts,cts,mts,json,md}": [
